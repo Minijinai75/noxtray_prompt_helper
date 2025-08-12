@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【NOXTRAY算圖 Prompt 小幫手】</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .copy-btn.copied {
+            background-color: #16a34a; /* green-600 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-100">【NOXTRAY算圖 Prompt 小幫手】</h1>
+            <p class="text-gray-400 mt-3">💖MINIJIN經ENI媽咪授權製作💖<br>幫助算圖新手太太可以簡單算出思年和睿圖片🎞<br>歡迎大家多生圖餵糧💕</p>
+        </header>
+
+        <!-- 使用說明區 -->
+        <section class="mb-8 bg-gray-800 p-6 rounded-xl shadow-lg">
+            <h2 class="text-2xl font-bold text-white mb-4">📝 使用流程</h2>
+            <ol class="list-decimal list-inside space-y-2 text-gray-300">
+                <li>在 <strong>Prompt 範本</strong> 區塊，點擊標籤按鈕或手動輸入，建立你的指令結構。</li>
+                <li>依序填寫 <strong>PC人設</strong>、<strong>配件</strong>、<strong>動作</strong> 等欄位的具體內容。</li>
+                <li>從 <strong>角色人設</strong> 下拉選單選擇思年或睿，或將此欄留空。</li>
+                <li>右側的 <strong>組合後的完整 Prompt</strong> 將會自動即時生成。</li>
+                <li>點擊任一輸出框旁的 <strong>複製</strong> 按鈕，即可輕鬆取用結果。</li>
+            </ol>
+        </section>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Left Column: Inputs -->
+            <div class="space-y-6 bg-gray-800 p-6 rounded-xl shadow-lg">
+                <!-- Prompt 範本 -->
+                <div>
+                    <label for="template-prompt" class="block text-lg font-semibold mb-2 text-gray-300">Prompt 範本</label>
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        <button data-tag="{PC人設}" class="tag-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition">PC人設</button>
+                        <button data-tag="{角色人設}" class="tag-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition">角色人設</button>
+                        <button data-tag="{配件}" class="tag-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition">配件</button>
+                        <button data-tag="{動作}" class="tag-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition">動作</button>
+                        <button data-tag="{場景}" class="tag-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition">場景</button>
+                        <button data-tag="{風格}" class="tag-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition">風格</button>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-2">點擊按鈕會自動加入參數。</p>
+                    <textarea id="template-prompt" rows="5" class="w-full p-3 bg-gray-700 border border-gray-600 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition" placeholder="點擊上方按鈕或手動輸入..."></textarea>
+                </div>
+
+                <!-- PC人設 -->
+                <div>
+                    <label for="pc-prompt-input" class="block text-lg font-semibold mb-2 text-gray-300">PC人設</label>
+                    <textarea id="pc-prompt-input" rows="3" class="w-full p-3 bg-gray-700 border border-gray-600 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"></textarea>
+                </div>
+
+                <!-- 角色人設 (下拉選單) -->
+                <div>
+                    <label for="character-select" class="block text-lg font-semibold mb-2 text-gray-300">角色人設</label>
+                    <select id="character-select" class="w-full p-3 bg-gray-700 border border-gray-600 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition">
+                        <option value="">-- 請選擇 --</option>
+                        <option value="nox">何思年NOX</option>
+                        <option value="stray">石睿 STRAY</option>
+                    </select>
+                    <div class="flex gap-2 mt-2">
+                        <button id="copy-nox-btn" class="copy-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition w-full">複製思年Prompt</button>
+                        <button id="copy-stray-btn" class="copy-btn bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs font-semibold py-1 px-3 rounded-full transition w-full">複製睿Prompt</button>
+                    </div>
+                </div>
+                
+                <!-- 配件 -->
+                <div>
+                    <label for="accessory-input" class="block text-lg font-semibold mb-2 text-gray-300">{配件}</label>
+                    <textarea id="accessory-input" rows="2" class="w-full p-3 bg-gray-700 border border-gray-600 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"></textarea>
+                </div>
+
+                <!-- 動作 -->
+                <div>
+                    <label for="action-input" class="block text-lg font-semibold mb-2 text-gray-300">{動作}</label>
+                    <textarea id="action-input" rows="2" class="w-full p-3 bg-gray-700 border border-gray-600 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"></textarea>
+                </div>
+
+                <!-- 場景 -->
+                <div>
+                    <label for="scene-input" class="block text-lg font-semibold mb-2 text-gray-300">{場景}</label>
+                    <textarea id="scene-input" rows="2" class="w-full p-3 bg-gray-700 border border-gray-600 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"></textarea>
+                </div>
+
+                <!-- 風格 -->
+                <div>
+                    <label for="style-input" class="block text-lg font-semibold mb-2 text-gray-300">{風格}</label>
+                    <textarea id="style-input" rows="2" class="w-full p-3 bg-gray-700 border border-gray-600 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition"></textarea>
+                </div>
+            </div>
+
+            <!-- Right Column: Outputs -->
+            <div class="space-y-6">
+                <!-- 組合後的 Prompt -->
+                <div class="bg-gray-800 p-6 rounded-xl shadow-lg h-fit">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xl font-semibold text-gray-200">組合後的完整 Prompt</h2>
+                        <button id="copy-final-prompt-btn" class="copy-btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-3 rounded-lg transition-all duration-200 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard mr-2" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+                            <span class="btn-text">複製</span>
+                        </button>
+                    </div>
+                    <div id="final-prompt" class="output-area bg-gray-900 p-4 border border-gray-700 rounded-lg min-h-[150px] text-sm whitespace-pre-wrap word-wrap-break-word font-mono"></div>
+                </div>
+
+                <!-- 負面題詞指令 -->
+                <div class="bg-gray-800 p-6 rounded-xl shadow-lg h-fit">
+                     <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xl font-semibold text-gray-200">AI 負面題詞產生指令</h2>
+                        <button id="copy-negative-command-btn" class="copy-btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-3 rounded-lg transition-all duration-200 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard mr-2" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+                            <span class="btn-text">複製</span>
+                        </button>
+                    </div>
+                    <div id="negative-prompt-command" class="output-area bg-gray-900 p-4 border border-gray-700 rounded-lg min-h-[150px] text-sm whitespace-pre-wrap word-wrap-break-word font-mono"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 預設的 Prompt 內容資料庫
+            const presetPrompts = {
+                nox: "solo, 1male, Silver irises, moderate eye size, silver-grey eyes, slim arched eyebrows, high-bridged nose, thin lips, gray hair, short hair, 37/63 hair parting, smooth layered hair, left-side bangs, hair falling over left eye, Pale porcelain skin, handsome anime boy,masterpiece, best quality,",
+                stray: "1male, solo, Handsome, perfect eyes, dark hair, green eyes, elegantly arched eyebrows, high-bridged nose, refined shape, silver earrings, light skin tone, smooth and delicate skin, bangs covering forehead, handsome boy, short hair, aegyo sal, masterpiece, best quality,"
+            };
+
+            // 1. 取得所有需要操作的 HTML 元素
+            const elements = {
+                templatePrompt: document.getElementById('template-prompt'),
+                pcPromptInput: document.getElementById('pc-prompt-input'),
+                characterSelect: document.getElementById('character-select'),
+                accessoryInput: document.getElementById('accessory-input'),
+                actionInput: document.getElementById('action-input'),
+                sceneInput: document.getElementById('scene-input'),
+                styleInput: document.getElementById('style-input'),
+                finalPromptOutput: document.getElementById('final-prompt'),
+                negativeCommandOutput: document.getElementById('negative-prompt-command'),
+                copyFinalPromptBtn: document.getElementById('copy-final-prompt-btn'),
+                copyNegativeCommandBtn: document.getElementById('copy-negative-command-btn'),
+                copyNoxBtn: document.getElementById('copy-nox-btn'),
+                copyStrayBtn: document.getElementById('copy-stray-btn')
+            };
+
+            // 2. 定義一個核心函式，用來更新所有輸出結果
+            function generatePrompts() {
+                const selectedPresetKey = elements.characterSelect.value;
+                const characterValue = presetPrompts[selectedPresetKey] || '';
+
+                const values = {
+                    template: elements.templatePrompt.value,
+                    pcPrompt: elements.pcPromptInput.value,
+                    character: characterValue,
+                    accessory: elements.accessoryInput.value,
+                    action: elements.actionInput.value,
+                    scene: elements.sceneInput.value,
+                    style: elements.styleInput.value
+                };
+
+                // --- 組合邏輯 (使用更新後的標籤) ---
+                let finalPrompt = values.template
+                    .replace(/{PC人設}/g, values.pcPrompt)
+                    .replace(/{角色人設}/g, values.character)
+                    .replace(/{配件}/g, values.accessory)
+                    .replace(/{動作}/g, values.action)
+                    .replace(/{場景}/g, values.scene)
+                    .replace(/{風格}/g, values.style);
+                
+                // --- 智慧清理逗號和空格 ---
+                // 1. 將一個或多個逗號和空格的組合，標準化為一個逗號和一個空格
+                finalPrompt = finalPrompt.replace(/([, ]+)/g, ', ');
+                // 2. 移除開頭可能多出來的逗號和空格
+                finalPrompt = finalPrompt.replace(/^, /, '');
+                // 3. 移除結尾可能多出來的逗號和空格
+                finalPrompt = finalPrompt.replace(/, $/, '');
+                
+                elements.finalPromptOutput.textContent = finalPrompt;
+
+                // --- 負面題詞指令邏輯 ---
+                const negativeCommand = `請根據以下的正面提示詞，生成一組詳盡的、適用於AI算圖的負面提示詞 (Negative Prompt)。請專注於避免常見的圖像瑕疵，例如：多餘或畸形的手指、扭曲的肢體、低解析度、模糊、糟糕的畫質、文字、水印、簽名等。\n\n正面提示詞：'${finalPrompt}'`;
+
+                if (elements.negativeCommandOutput) {
+                    elements.negativeCommandOutput.textContent = negativeCommand;
+                }
+            }
+
+            // 3. 複製功能
+            function copyToClipboard(text, btn) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    const originalText = btn.querySelector('.btn-text') ? btn.querySelector('.btn-text').textContent : btn.textContent;
+                    const target = btn.querySelector('.btn-text') ? btn.querySelector('.btn-text') : btn;
+                    target.textContent = '已複製!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        target.textContent = originalText;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('無法複製文字: ', err);
+                }
+                document.body.removeChild(ta);
+            }
+
+            // 4. 為所有輸入框和按鈕設定事件監聽器
+            const inputs = [
+                elements.templatePrompt,
+                elements.pcPromptInput,
+                elements.characterSelect,
+                elements.accessoryInput,
+                elements.actionInput,
+                elements.sceneInput,
+                elements.styleInput
+            ];
+            
+            inputs.forEach(input => {
+                if (input) {
+                    const eventType = input.tagName === 'SELECT' ? 'change' : 'input';
+                    input.addEventListener(eventType, generatePrompts);
+                }
+            });
+
+            if (elements.copyFinalPromptBtn) {
+                elements.copyFinalPromptBtn.addEventListener('click', () => {
+                    copyToClipboard(elements.finalPromptOutput.textContent, elements.copyFinalPromptBtn);
+                });
+            }
+
+            if (elements.copyNegativeCommandBtn) {
+                elements.copyNegativeCommandBtn.addEventListener('click', () => {
+                    copyToClipboard(elements.negativeCommandOutput.textContent, elements.copyNegativeCommandBtn);
+                });
+            }
+            
+            if (elements.copyNoxBtn) {
+                elements.copyNoxBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    copyToClipboard(presetPrompts.nox, elements.copyNoxBtn);
+                });
+            }
+
+            if (elements.copyStrayBtn) {
+                elements.copyStrayBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    copyToClipboard(presetPrompts.stray, elements.copyStrayBtn);
+                });
+            }
+
+            // 5. 標籤按鈕功能
+            const tagButtons = document.querySelectorAll('.tag-btn');
+            const templateTextarea = elements.templatePrompt;
+
+            tagButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const tag = button.dataset.tag;
+                    const currentVal = templateTextarea.value;
+                    const cursorPos = templateTextarea.selectionStart;
+                    
+                    const prefix = (cursorPos > 0 && currentVal[cursorPos - 1] !== ' ' && currentVal[cursorPos - 1] !== ',') ? ' ' : '';
+                    const suffix = ' ';
+                    const textToInsert = prefix + tag + suffix;
+
+                    const newValue = 
+                        currentVal.substring(0, cursorPos) + 
+                        textToInsert + 
+                        currentVal.substring(cursorPos);
+                    
+                    templateTextarea.value = newValue;
+                    
+                    const newCursorPos = cursorPos + textToInsert.length;
+                    templateTextarea.focus();
+                    templateTextarea.setSelectionRange(newCursorPos, newCursorPos);
+
+                    templateTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+            });
+
+            // 6. 首次載入頁面時，也執行一次函式
+            generatePrompts();
+        });
+    </script>
+
+</body>
+</html>
