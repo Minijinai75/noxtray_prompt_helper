@@ -20,7 +20,7 @@
     <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
         <header class="text-center mb-8">
             <h1 class="text-3xl sm:text-4xl font-bold text-gray-100">【NOXTRAY算圖 Prompt 小幫手】</h1>
-            <p class="text-gray-400 mt-3">💖MINIJIN經ENI媽咪授權製作💖<br>幫助算圖新手太太可以簡單算出思年和睿圖片📷<br>歡迎大家多生圖餵糧💕</p>
+            <p class="text-gray-400 mt-3">💖MINIJIN經ENI媽咪授權製作💖<br>幫助算圖新手太太可以簡單算出思年和睿圖片🎞<br>歡迎大家多生圖餵糧💕</p>
         </header>
 
         <!-- 使用說明區 -->
@@ -167,22 +167,14 @@
                     style: elements.styleInput.value
                 };
 
-                // --- 組合邏輯 (使用更新後的標籤) ---
-                let finalPrompt = values.template
+                // --- 組合邏輯 (已移除自動逗號修正) ---
+                const finalPrompt = values.template
                     .replace(/{PC人設}/g, values.pcPrompt)
                     .replace(/{角色人設}/g, values.character)
                     .replace(/{配件}/g, values.accessory)
                     .replace(/{動作}/g, values.action)
                     .replace(/{場景}/g, values.scene)
                     .replace(/{風格}/g, values.style);
-                
-                // --- 智慧清理逗號和空格 ---
-                // 1. 將一個或多個逗號和空格的組合，標準化為一個逗號和一個空格
-                finalPrompt = finalPrompt.replace(/([, ]+)/g, ', ');
-                // 2. 移除開頭可能多出來的逗號和空格
-                finalPrompt = finalPrompt.replace(/^, /, '');
-                // 3. 移除結尾可能多出來的逗號和空格
-                finalPrompt = finalPrompt.replace(/, $/, '');
                 
                 elements.finalPromptOutput.textContent = finalPrompt;
 
